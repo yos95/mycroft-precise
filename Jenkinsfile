@@ -58,9 +58,31 @@ pipeline {
                 }
             }
         }
+        stage('Build snap package') {
+            when {
+                anyOf {
+                    branch 'dev'
+                    branch 'release/*'
+                }
+            }
+            steps {
+                echo 'Building snap package...'
+                sh 'docker build -f ~/snapcraft-docker/Dockerfile -t \
+                    snapcraft-build .'
+                sh 'docker run  -v "${PWD}":/build -w /build \
+                    snapcraft-build:latest snapcraft'
+            }
+        }
     }
     post {
         cleanup {
+            sh(
+                label: 'Snapcraft Cleanup',
+                script: '''
+                    docker run  -v "${PWD}":/build -w /build \
+                        snapcraft-build:latest snapcraft clean
+                    '''
+            )
             sh(
                 label: 'Docker Container and Image Cleanup',
                 script: '''
