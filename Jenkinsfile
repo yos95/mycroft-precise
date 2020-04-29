@@ -58,7 +58,10 @@ pipeline {
                 }
             }
         }
-        stage('Build snap package') {
+        stage('Build and upload snap package') {
+            environment {
+                SNAP_LOGIN=credentials('snapcraft_login')
+            }
             when {
                 anyOf {
                     branch 'dev'
@@ -66,11 +69,21 @@ pipeline {
                 }
             }
             steps {
-                echo 'Building snap package...'
                 sh 'docker build -f ~/snapcraft-docker/Dockerfile -t \
                     snapcraft-build .'
+                echo 'Building snap package...'
                 sh 'docker run  -v "${PWD}":/build -w /build \
-                    snapcraft-build:latest snapcraft'
+                        snapcraft-build:latest snapcraft'
+                echo 'Pushing package to snap store'
+                sh('''
+                    mkdir -p .snapcraft
+                    cat ${SNAP_LOGIN} | base64 --decode --ignore-garbage \
+                        > .snapcraft/snapcraft.cfg
+                    docker run  -v "${PWD}":/build -w /build \
+                        snapcraft-build:latest snapcraft \
+                        push --release edge *.snap
+                    rm -rf .snapcraft
+                   ''')
             }
         }
     }
