@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "testmycroft"
+version = "0.1.0"
+description = ""
+authors = ["yossef aboukrat <yos95@hotmail.fr>"]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+precise_runner = "^0.3.1"
+mycroft-precise = "^0.3.0"
+prettyparse = "0.2"
+
+
+[tool.poetry.dev-dependencies]
+
+[tool.poetry.plugins."console_scripts"]
+'precise-add-noise' = 'precise.scripts.add_noise:main'
+'precise-collect'='precise.scripts.collect:main'
+'precise-convert'='precise.scripts.convert:main'
+'precise-eval'='precise.scripts.eval:main'
+'precise-listen'='precise.scripts.listen:main'
+'precise-listen-pocketsphinx'='precise.pocketsphinx.scripts.listen:main'
+'precise-engine'='precise.scripts.engine:main'
+'precise-simulate'='precise.scripts.simulate:main'
+'precise-test'='precise.scripts.test:main'
+'precise-graph'='precise.scripts.graph:main'
+'precise-test-pocketsphinx'='precise.pocketsphinx.scripts.test:main'
+'precise-train'='precise.scripts.train:main'
+'precise-train-optimize'='precise.scripts.train_optimize:main'
+'precise-train-sampled'='precise.scripts.train_sampled:main'
+'precise-train-incremental'='precise.scripts.train_incremental:main'
+'precise-train-generated'='precise.scripts.train_generated:main'
+'precise-calc-threshold'='precise.scripts.calc_threshold:main'
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
+
+packages=[
+{  include =   'precise' }, 
+{  include =   'precise.scripts' }, 
+{  include =  'precise.pocketsphinx' }, 
+{  include =  'precise.pocketsphinx.scripts' }, 
+]
