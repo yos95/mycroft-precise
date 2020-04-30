@@ -9,7 +9,7 @@ python = "^3.6"
 precise_runner = "^0.3.1"
 mycroft-precise = "^0.3.0"
 prettyparse = "0.2"
-
+numpy = "1.16"
 
 [tool.poetry.dev-dependencies]
 
